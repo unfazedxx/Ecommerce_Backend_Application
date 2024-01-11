@@ -6,24 +6,28 @@ const ProductTag = require('./ProductTag');
 
 // Products belongsTo Category
 Product.belongsTo(Category, {
-  as: 'Category of the product'
+  foreignKey: 'category_id',
+  onDelete: 'CASCADE',
 });
 
 // Categories have many Products
 //is this the right foreign key? we want to relate category and product
-Category.hasMany(Product,'categoryID')
+Category.hasMany(Product, {
+  foreignKey: 'category_id',
+  // onDelete: 'CASCADE',
+});
 
 // Products belongToMany Tags (through ProductTag)
 Product.belongsToMany(Tag, {
-  through: {model: ProductTag, onDelete: 'CASCADE'}, 
-  as: "All products"
+  through: ProductTag,
+  foreignKey: 'product_id'
 });
 
 // Tags belongToMany Products (through ProductTag)
 Tag.belongsToMany(Product, {
-  through: {model: ProductTag, onDelete: 'CASCADE'}, 
-  as: "All of the tags for products"
-});
+  through: ProductTag,
+  foreignKey: 'tag_id'
+})
 
 module.exports = {
   Product,
